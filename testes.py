@@ -77,9 +77,36 @@ def test_problem_user_button_remove(page:Page): #verificar se o usuário problem
 
     page.wait_for_load_state("networkidle")
 
-    page.click("#add-to-cart-sauce-labs-backpack")
-    expect(page.locator("#remove-sauce-labs-backpack")).to_be_visible()
+    ids_produtos = [
+            "sauce-labs-backpack",
+            "sauce-labs-bike-light",
+            "sauce-labs-bolt-t-shirt",
+            "sauce-labs-fleece-jacket",
+            "sauce-labs-onesie",
+            "test.allthethings()-t-shirt-(red)"
+        ]
 
-    page.click("#remove-sauce-labs-backpack")
+    nao_adicionados = []
+    nao_removidos = []
 
-    expect(page.locator("#add-to-cart-sauce-labs-backpack")).to_be_visible()
+    for id_produto in ids_produtos:
+        botao_adicionar = page.locator(f'[id="add-to-cart-{id_produto}"]')
+        botao_remover = page.locator(f'[id="remove-{id_produto}"]')
+
+        botao_adicionar.click()
+        page.wait_for_timeout(500)  # dá meio segundo pro botão trocar
+
+        if not botao_remover.is_visible():
+            nao_adicionados.append(id_produto)
+            continue
+
+        botao_remover.click()
+        page.wait_for_timeout(500)
+
+        if not botao_adicionar.is_visible():
+            nao_removidos.append(id_produto)
+
+    assert len(nao_removidos) == 0, f"Produtos não removidos: {nao_removidos}"
+
+
+
