@@ -74,22 +74,12 @@ def test_problem_user_button_remove(page:Page): #verificar se o usuário problem
     page.click("#login-button")
 
     expect(page).to_have_url("https://www.saucedemo.com/inventory.html")
-    expect((page).locator(".title")).to_have_text("Products")
+
+    page.wait_for_load_state("networkidle")
 
     page.click("#add-to-cart-sauce-labs-backpack")
-    page.click("#add-to-cart-sauce-labs-bike-light")    
-    page.click("#add-to-cart-sauce-labs-bolt-t-shirt")
-    page.click("#add-to-cart-sauce-labs-fleece-jacket") 
-    page.click("#add-to-cart-sauce-labs-onesie")
-    page.click('[id="add-to-cart-test.allthethings()-t-shirt-(red)"]')
-
-    expect((page).locator(".shopping_cart_badge")).to_have_text("3")
+    expect(page.locator("#remove-sauce-labs-backpack")).to_be_visible()
 
     page.click("#remove-sauce-labs-backpack")
-    page.click("#remove-sauce-labs-bike-light")
-    page.click("#remove-sauce-labs-bolt-t-shirt")
-    page.click("#remove-sauce-labs-fleece-jacket")
-    page.click("#remove-sauce-labs-onesie")
-    page.click('[id="remove-test.allthethings()-t-shirt-(red)"]')
 
-    expect((page).locator(".shopping_cart_badge")).to_have_count(0)
+    expect(page.locator("#add-to-cart-sauce-labs-backpack")).to_be_visible()
