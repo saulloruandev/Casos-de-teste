@@ -1,5 +1,6 @@
 import pytest
 from playwright.sync_api import Page, expect
+import time
 
 
 def test_login_valido(page:Page):  #entrar no site com usuário válido
@@ -10,6 +11,15 @@ def test_login_valido(page:Page):  #entrar no site com usuário válido
 
     expect(page).to_have_url("https://www.saucedemo.com/inventory.html")
     expect((page).locator(".title")).to_have_text("Products")
+
+
+def test_login_locked(page:Page):  #entrar no site com usuário bloqueado
+    page.goto("https://saucedemo.com")
+    page.fill("#user-name", "locked_out_user")
+    page.fill("#password", "secret_sauce")
+    page.click("#login-button")
+
+    expect(page.locator('[data-test="error"]')).to_have_text("Epic sadface: Sorry, this user has been locked out.")
 
 
 def test_problem_user_image(page:Page):  #verificar se o usuário problem_user tem imagens repetidas
@@ -45,7 +55,6 @@ def test_problem_user_image(page:Page):  #verificar se o usuário problem_user t
             imagens_vistas.add(src)
 
     assert len(imagens_repetidas) == 5, f"Produtos com imagem repetida: {imagens_repetidas}"
-
 
          
 def test_problem_user_button(page:Page): #verificar se o usuário problem_user tem botões de adicionar ao carrinho funcionando corretamente
@@ -94,7 +103,7 @@ def test_problem_user_button_remove(page:Page): #verificar se o usuário problem
         botao_remover = page.locator(f'[id="remove-{id_produto}"]')
 
         botao_adicionar.click()
-        page.wait_for_timeout(500)  # dá meio segundo pro botão trocar
+        page.wait_for_timeout(500)
 
         if not botao_remover.is_visible():
             nao_adicionados.append(id_produto)
@@ -109,4 +118,18 @@ def test_problem_user_button_remove(page:Page): #verificar se o usuário problem
     assert len(nao_removidos) == 0, f"Produtos não removidos: {nao_removidos}"
 
 
+def test_tempo_login(page:Page):
+    page.goto("https://saucedemo.com")
+    page.fill("#user-name", "performance_glitch_user")
+    page.fill("#password", "secret_sauce")
+
+    inicio = time.time()
+    page.click("#login-button")
+    expect(page).to_have_url("https://www.saucedemo.com/inventory.html")
+    fim = time.time()
+
+    tempo_gasto = fim - inicio
+    assert tempo_gasto < 5, f"O login demorou {tempo_gasto:.2f} segundos"
+
+    expect(page.locator(".title")).to_have_text("Products")
 
