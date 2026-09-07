@@ -187,7 +187,7 @@ def test_valid_tempo_login(page:Page): #verificar se o tempo de login do usuári
     fim = time.time()
 
     tempo_gasto = fim - inicio
-    assert tempo_gasto < 5, f"O login demorou {tempo_gasto:.2f} segundos"
+    assert tempo_gasto < 1, f"O login demorou {tempo_gasto:.2f} segundos"
 
     expect(page.locator(".title")).to_have_text("Products")
 
@@ -208,7 +208,7 @@ def test_valid_navegação(page:Page): #verificar se o usuário consegue ir do c
     fim = time.time()
 
     tempo_gasto = fim - inicio
-    assert tempo_gasto < 5, f"A navegação demorou {tempo_gasto:.2f} segundos"
+    assert tempo_gasto < 1, f"A navegação demorou {tempo_gasto:.2f} segundos"
 
 
 def test_valid_last_name_visivel(page:Page): #verificar se o usuário consegue preencher os dados
@@ -417,7 +417,7 @@ def test_invalid_performance_glitch_user_tempo_login(page:Page): #verificar se o
     fim = time.time()
 
     tempo_gasto = fim - inicio
-    assert tempo_gasto < 5, f"O login demorou {tempo_gasto:.2f} segundos"
+    assert tempo_gasto < 1, f"O login demorou {tempo_gasto:.2f} segundos"
 
     expect(page.locator(".title")).to_have_text("Products")
 
@@ -438,7 +438,7 @@ def test_invalid_performance_glitch_user_navegação(page:Page): #verificar se o
     fim = time.time()
 
     tempo_gasto = fim - inicio
-    assert tempo_gasto < 5, f"A navegação demorou {tempo_gasto:.2f} segundos"
+    assert tempo_gasto < 1, f"A navegação demorou {tempo_gasto:.2f} segundos"
 
 
 def test_invalid_error_user_button(page:Page): #verificar se o usuário error_user tem botões de adicionar ao carrinho funcionando corretamente
